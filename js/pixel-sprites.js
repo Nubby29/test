@@ -1,9 +1,9 @@
 'use strict';
 
 /* ============================================================
-   Experience: Bible Stories — Phase 9 Character Sprite Sheets
-   Version: 9.0.0
-   Original runtime-generated sprite sheets:
+   Experience: Bible Stories — Phase 10 Character Art Direction
+   Version: 10.0.0
+   Original runtime-generated sprite sheets with character-specific art direction:
    4 directions × 6 frames per character.
    Frames: idle, walk1, walk2, walk3, talk, carry.
    The sheet API is deliberately asset-compatible so authored
@@ -34,6 +34,20 @@ const PixelSprites = (() => {
     jacob:   { skin:'#d9a477', hair:'#5a3b1e', robe:'#5f8a8f', trim:'#41666b', accent:'#d9a441' },
     joseph:  { skin:'#d9a477', hair:'#2c2418', robe:'#d9a441', trim:'#a87924', accent:'#3f6fb5' },
     pharaoh: { skin:'#b87855', hair:'#2c2c34', robe:'#3f6fb5', trim:'#d9b45a', accent:'#d9b45a' },
+    wife:    { skin:'#d9a477', hair:'#3b2412', robe:'#a86f8a', trim:'#7e5069', accent:'#d9a441' },
+    son_green:{ skin:'#d9a477', hair:'#3f2a18', robe:'#6f8a5a', trim:'#4e6b3e', accent:'#caa76a' },
+    son_gold: { skin:'#d9a477', hair:'#2e2013', robe:'#8a7a4f', trim:'#665a39', accent:'#d9b15c' },
+    son_blue: { skin:'#d9a477', hair:'#4a3220', robe:'#5a7a8a', trim:'#405966', accent:'#b8cbd1' },
+    villager_a:{ skin:'#d2a078', hair:'#4a3520', robe:'#8a6d4a', trim:'#674f35', accent:'#b99464' },
+    villager_b:{ skin:'#d2a078', hair:'#5a4028', robe:'#7a6a55', trim:'#5a4d3d', accent:'#b9a88e' },
+    villager_c:{ skin:'#d2a078', hair:'#3a2a16', robe:'#96693f', trim:'#704b2f', accent:'#d2a76d' },
+    woman:   { skin:'#d9a477', hair:'#3b2412', robe:'#a86f8a', trim:'#7e5069', accent:'#d9a441' },
+    traveler:{ skin:'#d4a27d', hair:'#4a3320', robe:'#7d8a9a', trim:'#596674', accent:'#b9c6cf' },
+    elder:   { skin:'#d0a07b', hair:'#d8d3c8', robe:'#79634d', trim:'#5c4938', accent:'#e8e1d3' },
+    guard:   { skin:'#c99570', hair:'#33251b', robe:'#596b73', trim:'#38484f', accent:'#c6a45f' },
+    potiphar:{ skin:'#b87855', hair:'#2c2c34', robe:'#6c4f9a', trim:'#d9b45a', accent:'#d9b45a' },
+    pharaoh_guard:{ skin:'#b87855', hair:'#2c2c34', robe:'#3f6fb5', trim:'#d9b45a', accent:'#e7c86a' },
+    child:   { skin:'#d9a477', hair:'#5a3b1e', robe:'#c98d52', trim:'#8f6038', accent:'#e6c47a' },
     generic: { skin:'#d9a477', hair:'#5a3b1e', robe:'#9a7d55', trim:'#765d3d', accent:'#c8a96b' }
   };
 
@@ -42,6 +56,19 @@ const PixelSprites = (() => {
   function roleFor(name) {
     const n = String(name || '').toLowerCase();
     if (n === 'pharaoh') return 'pharaoh';
+    if (n.includes('noah') && n.includes('wife')) return 'wife';
+    if (n === 'shem') return 'son_green';
+    if (n === 'ham') return 'son_gold';
+    if (n === 'japheth') return 'son_blue';
+    if (n === 'sarah' || n === 'hagar' || n === 'rebekah') return 'woman';
+    if (n === 'terah' || n === 'lot') return 'elder';
+    if (n === 'isaac' || n === 'ishmael' || n === 'esau') return 'traveler';
+    if (n === 'jacob') return 'jacob';
+    if (n === 'judah') return 'guard';
+    if (n === 'potiphar') return 'potiphar';
+    if (n === 'wife') return 'woman';
+    if (n === 'benjamin' || n === 'son') return 'child';
+    if (n === 'servant' || n === 'brother') return 'traveler';
     if (n.includes('angel') || n === 'visitor') return 'angel';
     if (n === 'adam') return 'adam';
     if (n === 'eve') return 'eve';
@@ -51,7 +78,11 @@ const PixelSprites = (() => {
     if (n === 'lot') return 'lot';
     if (n === 'jacob') return 'jacob';
     if (n === 'joseph') return 'joseph';
-    if (n === 'builder' || n.includes('foreman') || n.includes('worker')) return 'builder';
+    if (n.includes('foreman') || n.includes('worker')) return 'builder';
+    if (n === 'villager') return 'villager_a';
+    if (n.includes('guard')) return 'guard';
+    if (n === 'daughter') return 'child';
+    if (n === 'brother') return 'traveler';
     return 'generic';
   }
 
@@ -151,12 +182,42 @@ const PixelSprites = (() => {
       rect(c, cx - 5, by - 27, 10, 6, p.hair);
       rect(c, cx - 3, by - 22, 6, 4, p.hair);
     }
-    if (role === 'builder') rect(c, cx - 7, by - 35, 14, 2, p.accent);
+    if (role === 'builder') {
+      rect(c, cx - 7, by - 35, 14, 2, p.accent);
+      rect(c, cx - 10, by - 17, 3, 4, p.trim);
+    }
+    if (role === 'wife' || role === 'woman') {
+      rect(c, cx - 8, by - 21, 16, 4, p.accent);
+      rect(c, cx - 9, by - 34, 2, 9, p.hair);
+      rect(c, cx + 7, by - 34, 2, 9, p.hair);
+    }
+    if (role === 'son_green' || role === 'son_gold' || role === 'son_blue') {
+      rect(c, cx - 8, by - 18, 16, 2, p.accent);
+    }
+    if (role === 'traveler' || role === 'elder') {
+      rect(c, cx - 9, by - 35, 18, 2, p.trim);
+    }
+    if (role === 'guard' || role === 'pharaoh_guard') {
+      rect(c, cx - 9, by - 21, 18, 3, p.trim);
+      rect(c, cx - 11, by - 18, 3, 9, p.trim);
+      rect(c, cx + 8, by - 18, 3, 9, p.trim);
+    }
+    if (role === 'potiphar' || role === 'pharaoh' || role === 'pharaoh_guard') {
+      rect(c, cx - 8, by - 39, 16, 3, p.accent);
+      rect(c, cx - 5, by - 42, 10, 3, p.trim);
+    }
+    if (role === 'child') {
+      rect(c, cx - 5, by - 23, 10, 2, p.accent);
+      rect(c, cx - 6, by - 37, 12, 3, p.hair);
+    }
     if (role === 'angel') {
       rect(c, cx - 12, by - 24, 4, 9, '#ffffff');
       rect(c, cx + 8, by - 24, 4, 9, '#ffffff');
       rect(c, cx - 14, by - 21, 2, 5, p.trim);
       rect(c, cx + 12, by - 21, 2, 5, p.trim);
+    }
+    if (role === 'elder' || role === 'noah' || role === 'abraham') {
+      rect(c, cx - 6, by - 20, 12, 2, p.trim);
     }
     if (role === 'abraham') {
       rect(c, cx + 10, by - 34, 2, 37, p.accent);
