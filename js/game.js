@@ -1967,54 +1967,9 @@ function renderTiles(x0, x1, y0, y1) {
     for (let tx = x0; tx <= x1; tx++) {
       const type = World.tileAt(tx, ty);
       const px = tx * TILE, py = ty * TILE;
-      ctx.fillStyle = tileColor(type, tx, ty);
-      ctx.fillRect(px, py, TILE, TILE);
-
-      if (type === T.GRASS || type === T.MEADOW || type === T.GARDEN) {
-        const h = hash2(tx * 3 + 1, ty * 3 + 2);
-        if (h < (type === T.GARDEN ? 0.55 : 0.15)) {
-          const fx = px + 6 + Math.floor(hash2(tx + 11, ty) * 19);
-          const fy = py + 6 + Math.floor(hash2(tx, ty + 13) * 19);
-          if ((type === T.GARDEN && h < 0.5) || (type === T.MEADOW && h < 0.07)) {
-            ctx.fillStyle = ['#fff3a0', '#ffb3c8', '#ffffff'][Math.floor(hash2(tx + 5, ty + 5) * 3)];
-            ctx.beginPath(); ctx.arc(fx, fy, 2.2, 0, 6.283); ctx.fill();
-          } else {
-            ctx.fillStyle = 'rgba(255,255,255,0.16)';
-            ctx.fillRect(fx, fy, 2, 4);
-          }
-        }
-      } else if (type === T.SOIL) {
-        ctx.strokeStyle = 'rgba(40,25,10,0.5)';
-        ctx.lineWidth = 2;
-        for (let f = 0; f < 3; f++) {
-          ctx.beginPath();
-          ctx.moveTo(px + 4, py + 8 + f * 8);
-          ctx.lineTo(px + TILE - 4, py + 8 + f * 8);
-          ctx.stroke();
-        }
-      } else if (type === T.MOUNTAIN) {
-        ctx.fillStyle = 'rgba(255,255,255,0.25)';
-        ctx.beginPath();
-        ctx.moveTo(px + 6, py + 20); ctx.lineTo(px + 16, py + 4); ctx.lineTo(px + 26, py + 20);
-        ctx.closePath(); ctx.fill();
-        ctx.fillStyle = 'rgba(255,255,255,0.85)';
-        ctx.beginPath();
-        ctx.moveTo(px + 12, py + 11); ctx.lineTo(px + 16, py + 4); ctx.lineTo(px + 20, py + 11);
-        ctx.closePath(); ctx.fill();
-      } else if (type === T.BRIDGE) {
-        ctx.strokeStyle = 'rgba(80,55,25,0.6)';
-        ctx.lineWidth = 2;
-        for (let f = 1; f < 4; f++) {
-          ctx.beginPath();
-          ctx.moveTo(px + f * 8, py);
-          ctx.lineTo(px + f * 8, py + TILE);
-          ctx.stroke();
-        }
-      }
-
-      ctx.strokeStyle = 'rgba(0,0,0,0.05)';
-      ctx.lineWidth = 1;
-      ctx.strokeRect(px + 0.5, py + 0.5, TILE - 1, TILE - 1);
+      // Phase 2: every terrain tile is authored as a 16x16 pixel pattern
+      // and rendered at 2x, keeping the existing 32px world grid.
+      PixelTiles.draw(type, tx, ty, ctx, px, py, TILE);
     }
   }
 }
