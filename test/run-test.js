@@ -153,6 +153,7 @@ try {
   load('js/audio.js');
   load('js/pixel-renderer.js');
   load('js/pixel-tiles.js');
+  load('js/pixel-objects.js');
   load('js/game.js');
 
   // ---------- helpers ----------
