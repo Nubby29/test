@@ -970,9 +970,9 @@ try {
       ' witnessed=' + witnessed.length + ' canon=' + els.endCanon.children.length +
       ' btn=' + els.againBtn.textContent);
 
-  // ---------- Phase 9 character sprite sheets ----------
+  // ---------- Phase 10 character art direction ----------
   const spriteDims = PixelSprites.dimensions();
-  const spriteRoles = ['angel','adam','eve','cain','noah','builder','abraham','lot','jacob','joseph','pharaoh','generic'];
+  const spriteRoles = ['angel','adam','eve','cain','noah','builder','abraham','lot','jacob','joseph','pharaoh','wife','son_green','son_gold','son_blue','villager_a','villager_b','villager_c','woman','traveler','elder','guard','potiphar','pharaoh_guard','child','generic'];
   const spriteSheetsOk = spriteDims.frameWidth === 24 && spriteDims.frameHeight === 40 &&
     spriteDims.columns === 6 && spriteDims.rows === 4 &&
     spriteRoles.every(role => PixelSprites.hasSheet(role));
@@ -980,8 +980,12 @@ try {
     PixelSprites.draw(ctx, { x: 240, y: 240, facing: f, moving: true }, 'abraham', 1.25) === true);
   const spriteActionsOk = ['talk','carry'].every(action =>
     PixelSprites.draw(ctx, { x: 240, y: 240, facing: 'down', moving: false }, 'builder', 1.25, { action }) === true);
-  log('TEST characterSheets dims=' + JSON.stringify(spriteDims) +
-    ' roles=' + spriteSheetsOk + ' facing=' + spriteFacingOk + ' actions=' + spriteActionsOk);
+  const artNames = ['Noah’s Wife','Shem','Ham','Japheth','Villager','Sarah','Hagar','Terah','Lot','Isaac','Rebekah','Esau','Wife','Servant','Jacob','Judah','Potiphar','Pharaoh','Benjamin'];
+  const artRolesOk = artNames.every(name => typeof PixelCharacters.roleFor(name, null) === 'string' && PixelSprites.hasSheet(PixelCharacters.roleFor(name, null)));
+  const entityVariantsOk = PixelCharacters.roleForEntity({ name:'Villager', x: 100, y: 100 }) !== PixelCharacters.roleForEntity({ name:'Villager', x: 192, y: 192 });
+  log('TEST characterArt dims=' + JSON.stringify(spriteDims) +
+    ' roles=' + spriteSheetsOk + ' facing=' + spriteFacingOk + ' actions=' + spriteActionsOk +
+    ' named=' + artRolesOk + ' variants=' + entityVariantsOk);
 
   // ---------- animal visuals: every kind used by the game draws a body ----------
   const animalSpecs = [
