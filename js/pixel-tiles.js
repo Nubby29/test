@@ -142,7 +142,7 @@ const PixelTiles = (() => {
    * collision or the world's 32px coordinates.
    */
   function drawTransitions(type, tx, ty, ctx, x, y, size, tileAt) {
-    const n = {
+    const neighbors = {
       n: tileAt(tx, ty - 1),
       e: tileAt(tx + 1, ty),
       s: tileAt(tx, ty + 1),
@@ -152,6 +152,7 @@ const PixelTiles = (() => {
       se: tileAt(tx + 1, ty + 1),
       sw: tileAt(tx - 1, ty + 1)
     };
+    const { n, e, s, w, ne, nw, se, sw } = neighbors;
     const edge = (a, b) => key(a) !== key(b);
     const scale = size / 16;
 
