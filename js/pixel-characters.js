@@ -163,7 +163,7 @@ const PixelCharacters = (() => {
 
   function drawPerson(ctx, person, time) {
     const role = person.role || roleFor(person.name, null);
-    draw(ctx, person.x, person.y + 6, person.facing || 'down', !!person.moving, role, { time });
+    draw(ctx, person.x, person.y + 6, person.facing || 'down', !!(person.moving || (person.movingT || 0) > 0), role, { time });
   }
 
   function drawPlayer(ctx, player, chapter, time) {
