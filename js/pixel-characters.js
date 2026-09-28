@@ -1,8 +1,8 @@
 'use strict';
 
 /* ============================================================
-   Experience: Bible Stories — Phase 9 Character Renderer
-   Version: 9.0.0
+   Experience: Bible Stories — Phase 10 Character Art Direction
+   Version: 10.0.0
    Character drawing now uses reusable sprite sheets with
    directional frames and action poses. Adam/Eve remain
    compatible with their original authored sheets in game.js.
@@ -32,10 +32,26 @@ const PixelCharacters = (() => {
     return (f === 'up' || f === 'down' || f === 'left' || f === 'right') ? f : (fallback || 'down');
   }
 
+  function roleForEntity(person) {
+    const name = String((person && person.name) || '');
+    const base = roleFor(name, null);
+    // Give repeated generic NPC names deliberate visual variation without
+    // changing World data or gameplay state.
+    if (base === 'villager_a' && name.toLowerCase() === 'villager') {
+      const bucket = Math.abs(Math.floor(((person.x || 0) + (person.y || 0)) / 32)) % 3;
+      return ['villager_a', 'villager_b', 'villager_c'][bucket];
+    }
+    if (base === 'traveler' && /^(servant|brother)$/i.test(name)) {
+      const bucket = Math.abs(Math.floor(((person.x || 0) + (person.y || 0)) / 32)) % 2;
+      return bucket ? 'traveler' : 'elder';
+    }
+    return base;
+  }
+
   function drawPerson(ctx, person, time) {
     if (!person) return false;
 
-    const role = person.role || roleFor(person.name, null);
+    const role = person.role || roleForEntity(person);
     const moving = !!(person.moving || (person.movingT || 0) > 0);
     const action = person.action || (person.carrying ? 'carry' : null);
 
@@ -65,5 +81,5 @@ const PixelCharacters = (() => {
     });
   }
 
-  return { drawPerson, drawPlayer, roleFor };
+  return { drawPerson, drawPlayer, roleFor, roleForEntity };
 })();
