@@ -2192,30 +2192,7 @@ function drawPlayerJoseph() {
   ctx.beginPath(); ctx.arc(x, y - 32, 6.2, Math.PI, 0); ctx.fill();
 }
 function drawPerson(p) {
-  const bob = Math.abs(Math.sin(time * 3 + (p.phase || 0)));
-  const x = p.x;
-  const y = p.y - bob * 1.5;
-  ctx.fillStyle = 'rgba(0,0,0,0.25)';
-  ctx.beginPath(); ctx.ellipse(x, p.y + 6, 9, 4, 0, 0, 6.283); ctx.fill();
-  // legs
-  ctx.fillStyle = '#f2d2a4';
-  ctx.fillRect(x - 6, y - 14, 4, 16);
-  ctx.fillRect(x + 2, y - 14, 4, 16);
-  // robe
-  ctx.fillStyle = p.robe || '#9a7d55';
-  ctx.beginPath(); ctx.ellipse(x, y - 12, 8.5, 9.5, 0, 0, 6.283); ctx.fill();
-  // head
-  ctx.fillStyle = '#f2d2a4';
-  ctx.beginPath(); ctx.arc(x, y - 30, 6, 0, 6.283); ctx.fill();
-  // hair
-  ctx.fillStyle = p.hair || '#5a3b1e';
-  ctx.beginPath(); ctx.arc(x, y - 32, 6.4, Math.PI, 0); ctx.fill();
-  if (p.beard) {
-    ctx.beginPath();
-    ctx.moveTo(x - 5.5, y - 29);
-    ctx.quadraticCurveTo(x, y - 20, x + 5.5, y - 29);
-    ctx.fill();
-  }
+  PixelCharacters.drawPerson(ctx, p, time);
 }
 function drawArk() {
   const k = World.ark;
@@ -2506,31 +2483,11 @@ function drawWifePillar() {
   }
 }
 function drawPlayer() {
-  // each chapter has its own playable character (data.playable)
+  // Adam and Eve keep their authored sprite sheets from the original game.
+  // Phase 4 supplies the new shared pixel renderer for every other playable character.
   if (CHAPTER && CHAPTER.playable === 'adam') { drawPlayerAdam(); return; }
   if (CHAPTER && CHAPTER.playable === 'eve') { drawPlayerEve(); return; }
-  if (CHAPTER && CHAPTER.playable === 'cain') { drawPlayerCain(); return; }
-  if (CHAPTER && CHAPTER.playable === 'noah') { drawPlayerNoah(); return; }
-if (CHAPTER && CHAPTER.playable === 'builder') { drawPlayerBuilder(); return; }
-if (CHAPTER && CHAPTER.playable === 'abraham') { drawPlayerAbraham(); return; }
-if (CHAPTER && CHAPTER.playable === 'lot') { drawPlayerLot(); return; }
-if (CHAPTER && CHAPTER.playable === 'jacob') { drawPlayerJacob(); return; }
-if (CHAPTER && CHAPTER.playable === 'joseph') { drawPlayerJoseph(); return; }
-  const x = player.x;
-  const bob = player.moving ? Math.abs(Math.sin(time * 10)) * 2 : 0;
-  const y = player.y - bob;
-  ctx.fillStyle = 'rgba(0,0,0,0.25)';
-  ctx.beginPath(); ctx.ellipse(player.x, player.y + 6, 10, 4, 0, 0, 6.283); ctx.fill();
-  const flap = Math.sin(time * 8) * 3;
-  ctx.fillStyle = '#ffffff';
-  ctx.strokeStyle = '#cfd6e6'; ctx.lineWidth = 1;
-  ctx.beginPath(); ctx.ellipse(x - 10, y - 14, 6, 11 + flap, -0.5, 0, 6.283); ctx.fill(); ctx.stroke();
-  ctx.beginPath(); ctx.ellipse(x + 10, y - 14, 6, 11 + flap, 0.5, 0, 6.283); ctx.fill(); ctx.stroke();
-  ctx.fillStyle = '#f7f4ea';
-  ctx.beginPath(); ctx.moveTo(x, y - 20); ctx.lineTo(x - 9, y + 5); ctx.lineTo(x + 9, y + 5); ctx.closePath(); ctx.fill();
-  ctx.strokeStyle = '#c9c2a6'; ctx.stroke();
-  ctx.fillStyle = '#f2d2a4';
-  ctx.beginPath(); ctx.arc(x, y - 24, 6, 0, 6.283); ctx.fill();
+  PixelCharacters.drawPlayer(ctx, player, CHAPTER, time);
 }
 // Chapter 2 playable character: Adam (the first man)
 function drawPlayerAdam() {
