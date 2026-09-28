@@ -159,6 +159,7 @@ try {
   load('js/pixel-animals.js');
   load('js/pixel-effects.js');
   load('js/pixel-life.js');
+  load('js/pixel-lighting.js');
   load('js/game.js');
 
   // ---------- helpers ----------
@@ -1012,6 +1013,37 @@ try {
   }
   log('TEST environmentalLife API=' + lifeApiOk + ' render=' + lifeRenderOk);
 
+  // ---------- Phase 13 lighting & time-of-day ----------
+  const lightingApiOk = typeof PixelLighting.beforeActors === 'function' &&
+    typeof PixelLighting.afterActors === 'function' &&
+    typeof PixelLighting.interior === 'function' &&
+    typeof PixelLighting.cycle === 'function';
+  let lightingRenderOk = false;
+  let lightingInteriorOk = false;
+  try {
+    World.lit = true;
+    PixelLighting.beforeActors(ctx, World, 0, 20, 0, 15, 1.25);
+    PixelLighting.afterActors(ctx, World, 0, 20, 0, 15, 1.25);
+    World.lit = false;
+    PixelLighting.beforeActors(ctx, World, 0, 20, 0, 15, 620.0);
+    PixelLighting.afterActors(ctx, World, 0, 20, 0, 15, 620.0);
+    lightingRenderOk = true;
+    World.interior = { x0: 100, y0: 100, x1: 300, y1: 220, window: { x: 200 } };
+    PixelLighting.interior(ctx, World, 1.25);
+    lightingInteriorOk = true;
+    World.interior = null;
+  } catch (e) {
+    lightingRenderOk = false;
+    lightingInteriorOk = false;
+    World.interior = null;
+  }
+  const cycleStatesOk = ['dawn','day','dusk','night'].every((name, i) => {
+    const samples = [30, 180, 420, 570];
+    return PixelLighting.cycle(samples[i]).name === name;
+  });
+  log('TEST lighting API=' + lightingApiOk + ' render=' + lightingRenderOk +
+    ' interior=' + lightingInteriorOk + ' cycle=' + cycleStatesOk);
+
   // ---------- Phase 11 architectural assets ----------
   const archOk = ['drawWell','drawAltar','drawTent','drawTower','drawArk','drawGate','drawArchitecture']
     .every(name => typeof PixelObjects[name] === 'function');
@@ -1057,7 +1089,7 @@ try {
   log('TEST audio toggles=' + audioOk);
 
   log('TEST runtimeErrors=' + errorCount);
-  const pass = spriteSheetsOk && spriteFacingOk && spriteActionsOk && artRolesOk && entityVariantsOk && ch1ok && ch2ok && ch3ok && ch4ok && ch5ok && ch6ok && ch7ok && ch8ok && ch9ok && ch10ok && ch11ok && ch12ok && ch13ok && ch14ok && ch15ok && animalsDrawOk && archOk && lifeApiOk && lifeRenderOk && adamSheetOk && eveSheetAllOk && cardGuard && audioOk && errorCount === 0;
+  const pass = spriteSheetsOk && spriteFacingOk && spriteActionsOk && artRolesOk && entityVariantsOk && ch1ok && ch2ok && ch3ok && ch4ok && ch5ok && ch6ok && ch7ok && ch8ok && ch9ok && ch10ok && ch11ok && ch12ok && ch13ok && ch14ok && ch15ok && animalsDrawOk && archOk && lifeApiOk && lifeRenderOk && lightingApiOk && lightingRenderOk && lightingInteriorOk && cycleStatesOk && adamSheetOk && eveSheetAllOk && cardGuard && audioOk && errorCount === 0;
   log(pass ? 'ALL_TESTS_PASSED' : 'TESTS_FAILED');
   process.exit(pass ? 0 : 1);
 } catch (e) {
