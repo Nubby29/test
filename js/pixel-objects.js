@@ -208,6 +208,97 @@ const PixelObjects = (() => {
   }
 
 
+
+  function drawWell(ctx, x, y) {
+    shadow(ctx, x, y + 8, 22, 6);
+    pixelRect(ctx, x - 13, y - 5, 26, 12, '#68665c', '#3e3a32');
+    ctx.fillStyle = '#8d8a78';
+    ctx.fillRect(x - 10, y - 7, 20, 4);
+    ctx.fillStyle = '#3d3326';
+    ctx.fillRect(x - 6, y - 3, 12, 7);
+    ctx.fillStyle = '#5b4027';
+    ctx.fillRect(x - 17, y - 18, 3, 19); ctx.fillRect(x + 14, y - 18, 3, 19);
+    ctx.fillRect(x - 17, y - 20, 34, 3);
+    ctx.fillStyle = '#b47a3e'; ctx.fillRect(x - 2, y - 17, 4, 12);
+  }
+
+  function drawAltar(ctx, x, y) {
+    shadow(ctx, x, y + 10, 34, 7);
+    pixelRect(ctx, x - 18, y - 2, 36, 11, '#766b5a', '#413b32');
+    pixelRect(ctx, x - 14, y - 9, 28, 7, '#94866c', '#5b5142');
+    ctx.fillStyle = '#c2a06a';
+    ctx.fillRect(x - 10, y - 7, 6, 2); ctx.fillRect(x + 3, y - 4, 7, 2);
+    ctx.fillStyle = '#d8c08a'; ctx.fillRect(x - 3, y - 17, 6, 5);
+    ctx.fillStyle = '#f1a33c'; ctx.fillRect(x - 2, y - 20, 4, 4);
+    ctx.fillStyle = '#fff0a2'; ctx.fillRect(x - 1, y - 22, 2, 3);
+  }
+
+  function drawTent(ctx, x, y) {
+    shadow(ctx, x, y + 8, 42, 7);
+    ctx.fillStyle = '#765137';
+    ctx.fillRect(x - 21, y - 2, 42, 5);
+    ctx.fillStyle = '#a98255';
+    ctx.fillRect(x - 20, y - 18, 40, 17);
+    ctx.fillStyle = '#6d4930';
+    ctx.fillRect(x - 20, y - 18, 40, 3);
+    ctx.fillStyle = '#4d3625';
+    ctx.fillRect(x - 5, y - 3, 10, 18);
+    ctx.fillStyle = '#c19a67'; ctx.fillRect(x - 15, y - 14, 10, 3);
+  }
+
+  function drawTower(ctx, x, y, w, h) {
+    shadow(ctx, x, y + 8, w * 0.7, 7);
+    const left = x - w / 2;
+    for (let row = 0; row < h; row += 7) {
+      ctx.fillStyle = row % 14 === 0 ? '#9a6f48' : '#b17f50';
+      ctx.fillRect(left + (row % 21) * 0.35, y - row - 7, w - (row % 17), 7);
+      ctx.fillStyle = '#765237';
+      ctx.fillRect(left + 3, y - row - 2, 5, 2);
+    }
+    ctx.fillStyle = '#5c412d';
+    ctx.fillRect(x - 6, y - h + 8, 12, 15);
+    ctx.fillStyle = '#d09a5a';
+    ctx.fillRect(x - 4, y - h + 10, 3, 4);
+  }
+
+  function drawArk(ctx, x, y) {
+    shadow(ctx, x, y + 13, 62, 8);
+    ctx.fillStyle = '#6b4025'; ctx.fillRect(x - 34, y - 8, 68, 18);
+    ctx.fillStyle = '#9a6236'; ctx.fillRect(x - 29, y - 18, 58, 12);
+    ctx.fillStyle = '#c28a4b'; ctx.fillRect(x - 25, y - 23, 50, 7);
+    ctx.fillStyle = '#51331f'; ctx.fillRect(x - 8, y - 19, 16, 13);
+    ctx.fillStyle = '#d2a25d'; ctx.fillRect(x - 25, y - 16, 11, 3); ctx.fillRect(x + 14, y - 16, 11, 3);
+    ctx.fillStyle = '#4c301d'; ctx.fillRect(x - 36, y + 8, 72, 4);
+  }
+
+  function drawGate(ctx, x, y, width = 30) {
+    shadow(ctx, x, y + 5, width + 14, 5);
+    ctx.fillStyle = '#654224'; ctx.fillRect(x - width / 2, y - 4, width, 5);
+    ctx.fillRect(x - width / 2, y - 4, 4, 20); ctx.fillRect(x + width / 2 - 4, y - 4, 4, 20);
+    ctx.fillStyle = '#9b6b36'; ctx.fillRect(x - width / 2 + 5, y, width - 10, 3);
+    ctx.fillRect(x - width / 2 + 5, y + 8, width - 10, 3);
+  }
+
+  function drawArchitecture(ctx, world) {
+    // Phase 11: chapter-aware landmarks layered on existing world state.
+    for (const h of (world.huts || [])) {
+      drawHut(ctx, h);
+    }
+    for (const soil of (world.soils || [])) {
+      if (soil && soil.x != null) {
+        ctx.fillStyle = '#6b4a2e'; ctx.fillRect(Math.round(soil.x - 11), Math.round(soil.y - 7), 22, 14);
+        ctx.fillStyle = '#8b6340'; ctx.fillRect(Math.round(soil.x - 8), Math.round(soil.y - 4), 16, 2);
+      }
+    }
+    if (world.altar) drawAltar(ctx, world.altar.x, world.altar.y);
+    if (world.tent) drawTent(ctx, world.tent.x, world.tent.y);
+    if (world.ark) drawArk(ctx, world.ark.x, world.ark.y);
+    if (world.arkPoint && !world.ark) drawArk(ctx, world.arkPoint.x, world.arkPoint.y);
+    if (world.tower) drawTower(ctx, world.tower.x, world.tower.y, 58, 92);
+    if (world.gate) drawGate(ctx, world.gate.x, world.gate.y, 34);
+    if (world.cityGate) drawGate(ctx, world.cityGate.x, world.cityGate.y, 42);
+  }
+
   function drawComposition(ctx, world, x0, x1, y0, y1, timeValue, tileAt) {
     // Phase 8: layered map composition. Visual-only; World owns collision/state.
     const terrain = (type) => {
@@ -299,5 +390,5 @@ const PixelObjects = (() => {
     }
   }
 
-  return { drawGroundDecor, drawTree, drawHut, drawRock  , drawComposition };
+  return { drawGroundDecor, drawTree, drawHut, drawRock, drawComposition, drawArchitecture, drawWell, drawAltar, drawTent, drawTower, drawArk, drawGate };
 })();
