@@ -207,5 +207,97 @@ const PixelObjects = (() => {
     }
   }
 
-  return { drawGroundDecor, drawTree, drawHut, drawRock };
+
+  function drawComposition(ctx, world, x0, x1, y0, y1, timeValue, tileAt) {
+    // Phase 8: layered map composition. Visual-only; World owns collision/state.
+    const terrain = (type) => {
+      if (type === T.MOUNTAIN) return 'M';
+      if (type === T.PATH) return 'P';
+      if (type === T.SAND) return 'S';
+      if (type === T.WATER) return 'W';
+      if (type === T.MEADOW) return 'E';
+      if (type === T.GRASS) return 'G';
+      return 'O';
+    };
+    const h = (x,y,seed) => hash(x,y,seed);
+
+    // Cliff faces make mountain masses read as elevated land rather than flat tiles.
+    for (let ty = y0; ty <= y1; ty++) for (let tx = x0; tx <= x1; tx++) {
+      const type = tileAt(tx, ty);
+      const x = tx * TILE, y = ty * TILE, d = 4;
+      if (type === T.MOUNTAIN) {
+        if (terrain(tileAt(tx, ty + 1)) !== 'M') {
+          ctx.fillStyle = '#303936'; ctx.fillRect(x, y + TILE - d, TILE, d);
+          ctx.fillStyle = '#737b72'; ctx.fillRect(x, y + TILE - d, TILE, 2);
+        }
+        if (terrain(tileAt(tx + 1, ty)) !== 'M') {
+          ctx.fillStyle = '#303936'; ctx.fillRect(x + TILE - d, y, d, TILE);
+        }
+      }
+      // Path edging and small worn marks create continuous road composition.
+      if (type === T.PATH) {
+        const n = tileAt(tx,ty-1), s = tileAt(tx,ty+1), w = tileAt(tx-1,ty), e = tileAt(tx+1,ty);
+        ctx.fillStyle = '#866844';
+        if (n !== T.PATH && n !== T.BRIDGE) ctx.fillRect(x,y,TILE,2);
+        if (s !== T.PATH && s !== T.BRIDGE) ctx.fillRect(x,y+TILE-2,TILE,2);
+        if (w !== T.PATH && w !== T.BRIDGE) ctx.fillRect(x,y,2,TILE);
+        if (e !== T.PATH && e !== T.BRIDGE) ctx.fillRect(x+TILE-2,y,2,TILE);
+        if (h(tx,ty,31) < 0.22) {
+          ctx.fillStyle = 'rgba(75,55,35,0.28)';
+          ctx.fillRect(x+7,y+11,5,2); ctx.fillRect(x+20,y+17,4,2);
+        }
+      }
+      // Sparse shrubs break up large fields without covering walkable routes.
+      if ((type === T.GRASS || type === T.MEADOW) &&
+          h(tx,ty,81) < (type === T.MEADOW ? 0.025 : 0.012)) {
+        const same = tileAt(tx-1,ty) === type && tileAt(tx+1,ty) === type &&
+                     tileAt(tx,ty-1) === type && tileAt(tx,ty+1) === type;
+        if (same) {
+          const sx=x+16, sy=y+20;
+          ctx.fillStyle='rgba(20,30,15,0.22)'; ctx.fillRect(sx-7,sy+3,14,4);
+          ctx.fillStyle='#2f6e38'; ctx.fillRect(sx-7,sy-3,14,7); ctx.fillRect(sx-4,sy-7,8,5);
+          ctx.fillStyle='#579247'; ctx.fillRect(sx-4,sy-5,4,3);
+        }
+      }
+    }
+
+    // Settlement yards: a fence + occasional well gives huts a sense of place.
+    for (const hut of (world.huts || [])) {
+      const x = Math.round(hut.x), y = Math.round(hut.y);
+      ctx.fillStyle = '#5c3b22';
+      for (const px of [x-29,x+27]) {
+        ctx.fillRect(px,y-7,3,15); ctx.fillRect(px,y+9,3,7);
+      }
+      ctx.fillStyle = '#8b5b31';
+      ctx.fillRect(x-29,y-6,56,3); ctx.fillRect(x-29,y+3,56,3);
+      ctx.fillStyle = '#b07a43'; ctx.fillRect(x-24,y-5,18,1); ctx.fillRect(x+7,y+4,16,1);
+      // gate opening
+      ctx.clearRect(x-8,y+1,16,7);
+
+      if (h(Math.round(x/TILE),Math.round(y/TILE),91) < 0.55) {
+        const wx=x+32, wy=y+18;
+        ctx.fillStyle='rgba(20,15,8,0.24)'; ctx.fillRect(wx-12,wy+7,24,4);
+        ctx.fillStyle='#4f514b'; ctx.fillRect(wx-11,wy-3,22,11);
+        ctx.fillStyle='#a19e8b'; ctx.fillRect(wx-8,wy-5,16,5);
+        ctx.fillStyle='#5c3b22'; ctx.fillRect(wx-13,wy-16,3,14); ctx.fillRect(wx+10,wy-16,3,14);
+        ctx.fillRect(wx-13,wy-17,26,3);
+        ctx.fillStyle='#3d3324'; ctx.fillRect(wx-6,wy-2,12,5);
+      }
+    }
+
+    // Multi-tile background tree masses add depth behind the existing trees.
+    for (const tr of (world.trees || [])) {
+      const tx=Math.floor(tr.x/TILE), ty=Math.floor(tr.y/TILE);
+      if (h(tx,ty,117) >= 0.22) continue;
+      const x=tr.x-22, y=tr.y-10, s=0.7;
+      ctx.fillStyle='rgba(20,25,12,0.20)'; ctx.fillRect(x-15*s,y+12*s,30*s,5*s);
+      ctx.fillStyle='#234f2d';
+      ctx.fillRect(x-18*s,y-9*s,36*s,17*s);
+      ctx.fillRect(x-12*s,y-19*s,24*s,14*s);
+      ctx.fillStyle='#4b8b43'; ctx.fillRect(x-10*s,y-14*s,9*s,5*s); ctx.fillRect(x+3*s,y-20*s,8*s,5*s);
+      ctx.fillStyle='#6ba64e'; ctx.fillRect(x-5*s,y-19*s,5*s,3*s);
+    }
+  }
+
+  return { drawGroundDecor, drawTree, drawHut, drawRock  , drawComposition };
 })();
