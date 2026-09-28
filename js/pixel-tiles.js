@@ -89,7 +89,16 @@ const PixelTiles = (() => {
   };
 
   function key(type) {
-    return Object.keys(window.TERRAIN_NAMES || {}).find(k => window.TERRAIN_NAMES[k] === type) || type;
+    if (type === T.GRASS) return 'GRASS';
+    if (type === T.MEADOW) return 'MEADOW';
+    if (type === T.WATER) return 'WATER';
+    if (type === T.MOUNTAIN) return 'MOUNTAIN';
+    if (type === T.SAND) return 'SAND';
+    if (type === T.PATH) return 'PATH';
+    if (type === T.SOIL) return 'SOIL';
+    if (type === T.GARDEN) return 'GARDEN';
+    if (type === T.BRIDGE) return 'BRIDGE';
+    return 'GRASS';
   }
 
   function draw(type, tx, ty, ctx, x, y, size) {
