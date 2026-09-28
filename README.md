@@ -224,5 +224,8 @@ The visual layer is being upgraded in isolated phases without changing the quest
 7. **Authored terrain transitions** — neighbouring-tile aware shorelines, terrain banks, path/soil/garden boundaries and pixel corner cuts, while preserving the original 32px world grid.
 8. **Advanced map composition** — layered cliff faces, road edging, settlement yards, wells, field shrubs and background tree masses turn the tile map into a composed environment rather than a collection of isolated tiles.
 9. **Character sprite sheets** — reusable 4-direction sheets with idle, 3 walk frames, talk and carry poses give characters consistent pivots, animation timing and action states. The sheet API is asset-compatible with future authored PNGs.
+10. **Character art direction** — distinct biblical-era identities, family palettes, villager variants, elders, travelers, guards and chapter-specific roles.
+11. **Buildings & architectural assets** — reusable pixel-art huts, wells, altars, tents, gates, towers and ark structures layered onto chapter landmarks.
+12. **Animation & environmental life** — swaying grass, butterflies, fireflies, drifting dust, settlement smoke and subtle meadow particles make the world feel alive without changing gameplay state.
 
 All of these are original renderers built for this project; the upgrade does not copy Pokémon, Zelda, or other commercial game assets.
