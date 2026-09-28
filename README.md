@@ -221,5 +221,6 @@ The visual layer is being upgraded in six isolated phases without changing the q
 4. **Characters** — directional pixel characters with walking animation and chapter-specific visual identities.
 5. **Animals & NPCs** — pixel-rendered animals and supporting creature palettes.
 6. **Effects & polish** — animated water highlights, rain, smoke/fire, dust, ambient particles and atmospheric pixel accents.
+7. **Authored terrain transitions** — neighbouring-tile aware shorelines, terrain banks, path/soil/garden boundaries and pixel corner cuts, while preserving the original 32px world grid.
 
 All of these are original renderers built for this project; the upgrade does not copy Pokémon, Zelda, or other commercial game assets.
