@@ -44,13 +44,13 @@ function reportError(err) {
 let vw = 0, vh = 0, dpr = 1;
 const cam = { x: 0, y: 0 };
 function resize() {
-  vw = window.innerWidth;
-  vh = window.innerHeight;
-  dpr = window.devicePixelRatio || 1;
-  canvas.width = Math.floor(vw * dpr);
-  canvas.height = Math.floor(vh * dpr);
-  canvas.style.width = vw + 'px';
-  canvas.style.height = vh + 'px';
+  // Phase 1: render the game at a fixed low logical resolution, then
+  // scale that surface to the browser viewport with nearest-neighbour.
+  const size = PixelRenderer.configureCanvas(canvas, window);
+  vw = size.width;
+  vh = size.height;
+  dpr = size.dpr;
+  PixelRenderer.prepareContext(ctx);
 }
 window.addEventListener('resize', resize);
 
@@ -3197,7 +3197,8 @@ function drawLabels() {
 
 // ---------- render: main ----------
 function render() {
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  PixelRenderer.prepareContext(ctx);
   ctx.fillStyle = '#12203a';
   ctx.fillRect(0, 0, vw, vh);
   ctx.save();
