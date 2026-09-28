@@ -210,3 +210,16 @@ errors** under strict browser-accurate canvas validation. Exits `0` and prints
 `ALL_TESTS_PASSED` on success.
 #   t e s t  
  
+
+## Pixel-art visual upgrade
+
+The visual layer is being upgraded in six isolated phases without changing the quest/world logic:
+
+1. **Pixel foundation** — fixed low-resolution rendering and nearest-neighbour scaling.
+2. **Pixel terrain** — authored pixel terrain patterns for grass, meadow, water, mountain, sand, paths, soil, garden and bridges.
+3. **Environment** — pixel trees, huts, rocks and deterministic ground decoration.
+4. **Characters** — directional pixel characters with walking animation and chapter-specific visual identities.
+5. **Animals & NPCs** — pixel-rendered animals and supporting creature palettes.
+6. **Effects & polish** — animated water highlights, rain, smoke/fire, dust, ambient particles and atmospheric pixel accents.
+
+All of these are original renderers built for this project; the upgrade does not copy Pokémon, Zelda, or other commercial game assets.
