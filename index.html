@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Experience: Bible Stories — Chapter 1: God Made Heaven and Earth</title>
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<div id="game">
+  <canvas id="canvas"></canvas>
+
+  <!-- ===== HUD ===== -->
+  <div id="hud">
+    <div id="audioBtns">
+      <button id="musicBtn" class="iconBtn">♪ Music On</button>
+      <button id="sfxBtn" class="iconBtn">🔊 Sound On</button>
+    </div>
+    <div id="questPanel">
+      <div class="panelHead">Quest Journal <span id="questCount">0/5</span></div>
+      <div id="questTitle">—</div>
+      <div id="questObjective">—</div>
+      <div id="questProgress"></div>
+      <div class="doneHead">Completed</div>
+      <ul id="questDone"><li class="none">Nothing yet…</li></ul>
+    </div>
+
+    <div id="prompt" class="hidden"></div>
+    <div id="toasts"></div>
+  </div>
+
+  <!-- ===== Dialog box (bottom) ===== -->
+  <div id="dialogBox" class="hidden">
+    <div id="dlgSpeaker"></div>
+    <div id="dlgText"></div>
+    <div class="advHint"><span class="key">E</span> / <span class="key">SPACE</span> / CLICK ▸</div>
+  </div>
+
+  <!-- ===== Cinematic letterbox cutscene ===== -->
+  <div id="cinema" class="hidden">
+    <div class="bar top"></div>
+    <div class="bar bottom"></div>
+    <div id="cinemaBox">
+      <div id="cinemaSpeaker"></div>
+      <div id="cinemaText"></div>
+      <div class="advHint"><span class="key">E</span> / <span class="key">SPACE</span> / CLICK ▸</div>
+    </div>
+  </div>
+
+  <!-- white flash for canon moments -->
+  <div id="flash"></div>
+
+  <!-- ===== Chapter selector (start screen) ===== -->
+  <div id="startScreen" class="overlay">
+    <div class="startCard">
+      <div class="kicker">Experience: Bible Stories</div>
+      <h1>Choose a Chapter</h1>
+      <p class="selectHint">A 2D top-down Bible RPG — pick any chapter below to begin.</p>
+      <div id="chapterList"></div>
+      <div class="controls">
+        <span><span class="key">W</span><span class="key">A</span><span class="key">S</span><span class="key">D</span> / Arrows — Move</span>
+        <span><span class="key">E</span> / <span class="key">SPACE</span> — Talk &amp; Interact</span>
+        <span><span class="key">1</span>–<span class="key">9</span> / <span class="key">0</span> — Start a chapter instantly</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Chapter complete ===== -->
+  <div id="chapterEnd" class="overlay hidden">
+    <div class="startCard endCard">
+      <div class="kicker">Canon Event Witnessed</div>
+      <h1 id="endTitle">Chapter 1 Complete</h1>
+      <h2 id="endSub">God Made Heaven and Earth</h2>
+      <ul id="endQuests"></ul>
+      <div class="canonHead">Canon Events</div>
+      <ul id="endCanon"></ul>
+      <p class="nextChap">The story continues…</p>
+      <button id="againBtn">Play Again</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/world.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/game.js"></script>
+</body>
+</html>
