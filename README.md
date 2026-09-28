@@ -213,7 +213,7 @@ errors** under strict browser-accurate canvas validation. Exits `0` and prints
 
 ## Pixel-art visual upgrade
 
-The visual layer is being upgraded in six isolated phases without changing the quest/world logic:
+The visual layer is being upgraded in isolated phases without changing the quest/world logic:
 
 1. **Pixel foundation** — fixed low-resolution rendering and nearest-neighbour scaling.
 2. **Pixel terrain** — authored pixel terrain patterns for grass, meadow, water, mountain, sand, paths, soil, garden and bridges.
@@ -223,5 +223,6 @@ The visual layer is being upgraded in six isolated phases without changing the q
 6. **Effects & polish** — animated water highlights, rain, smoke/fire, dust, ambient particles and atmospheric pixel accents.
 7. **Authored terrain transitions** — neighbouring-tile aware shorelines, terrain banks, path/soil/garden boundaries and pixel corner cuts, while preserving the original 32px world grid.
 8. **Advanced map composition** — layered cliff faces, road edging, settlement yards, wells, field shrubs and background tree masses turn the tile map into a composed environment rather than a collection of isolated tiles.
+9. **Character sprite sheets** — reusable 4-direction sheets with idle, 3 walk frames, talk and carry poses give characters consistent pivots, animation timing and action states. The sheet API is asset-compatible with future authored PNGs.
 
 All of these are original renderers built for this project; the upgrade does not copy Pokémon, Zelda, or other commercial game assets.
