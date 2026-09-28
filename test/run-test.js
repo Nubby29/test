@@ -1038,7 +1038,7 @@ try {
   log('TEST audio toggles=' + audioOk);
 
   log('TEST runtimeErrors=' + errorCount);
-  const pass = spriteSheetsOk && spriteFacingOk && spriteActionsOk && ch1ok && ch2ok && ch3ok && ch4ok && ch5ok && ch6ok && ch7ok && ch8ok && ch9ok && ch10ok && ch11ok && ch12ok && ch13ok && ch14ok && ch15ok && animalsDrawOk && adamSheetOk && eveSheetAllOk && cardGuard && audioOk && errorCount === 0;
+  const pass = spriteSheetsOk && spriteFacingOk && spriteActionsOk && artRolesOk && entityVariantsOk && ch1ok && ch2ok && ch3ok && ch4ok && ch5ok && ch6ok && ch7ok && ch8ok && ch9ok && ch10ok && ch11ok && ch12ok && ch13ok && ch14ok && ch15ok && animalsDrawOk && adamSheetOk && eveSheetAllOk && cardGuard && audioOk && errorCount === 0;
   log(pass ? 'ALL_TESTS_PASSED' : 'TESTS_FAILED');
   process.exit(pass ? 0 : 1);
 } catch (e) {
