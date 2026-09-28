@@ -152,6 +152,7 @@ try {
   load('js/world.js');
   load('js/audio.js');
   load('js/pixel-renderer.js');
+  load('js/pixel-tiles.js');
   load('js/game.js');
 
   // ---------- helpers ----------
