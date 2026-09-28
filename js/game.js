@@ -1969,7 +1969,7 @@ function renderTiles(x0, x1, y0, y1) {
       const px = tx * TILE, py = ty * TILE;
       // Phase 2: every terrain tile is authored as a 16x16 pixel pattern
       // and rendered at 2x, keeping the existing 32px world grid.
-      PixelTiles.draw(type, tx, ty, ctx, px, py, TILE);
+      PixelTiles.draw(type, tx, ty, ctx, px, py, TILE, (nx, ny) => World.tileAt(nx, ny));
     }
   }
 }
