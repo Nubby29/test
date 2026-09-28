@@ -154,6 +154,7 @@ try {
   load('js/pixel-renderer.js');
   load('js/pixel-tiles.js');
   load('js/pixel-objects.js',
+    'js/pixel-sprites.js',
     'js/pixel-characters.js',
     'js/pixel-animals.js');
   load('js/game.js');
@@ -969,6 +970,19 @@ try {
       ' witnessed=' + witnessed.length + ' canon=' + els.endCanon.children.length +
       ' btn=' + els.againBtn.textContent);
 
+  // ---------- Phase 9 character sprite sheets ----------
+  const spriteDims = PixelSprites.dimensions();
+  const spriteRoles = ['angel','adam','eve','cain','noah','builder','abraham','lot','jacob','joseph','pharaoh','generic'];
+  const spriteSheetsOk = spriteDims.frameWidth === 24 && spriteDims.frameHeight === 40 &&
+    spriteDims.columns === 6 && spriteDims.rows === 4 &&
+    spriteRoles.every(role => PixelSprites.hasSheet(role));
+  const spriteFacingOk = ['down','right','up','left'].every(f =>
+    PixelSprites.draw(ctx, { x: 240, y: 240, facing: f, moving: true }, 'abraham', 1.25) === true);
+  const spriteActionsOk = ['talk','carry'].every(action =>
+    PixelSprites.draw(ctx, { x: 240, y: 240, facing: 'down', moving: false }, 'builder', 1.25, { action }) === true);
+  log('TEST characterSheets dims=' + JSON.stringify(spriteDims) +
+    ' roles=' + spriteSheetsOk + ' facing=' + spriteFacingOk + ' actions=' + spriteActionsOk);
+
   // ---------- animal visuals: every kind used by the game draws a body ----------
   const animalSpecs = [
     { kind: 'sheep', name: 'sheep' }, { kind: 'sheep', name: 'ram' },
@@ -1020,7 +1034,7 @@ try {
   log('TEST audio toggles=' + audioOk);
 
   log('TEST runtimeErrors=' + errorCount);
-  const pass = ch1ok && ch2ok && ch3ok && ch4ok && ch5ok && ch6ok && ch7ok && ch8ok && ch9ok && ch10ok && ch11ok && ch12ok && ch13ok && ch14ok && ch15ok && animalsDrawOk && adamSheetOk && eveSheetAllOk && cardGuard && audioOk && errorCount === 0;
+  const pass = spriteSheetsOk && spriteFacingOk && spriteActionsOk && ch1ok && ch2ok && ch3ok && ch4ok && ch5ok && ch6ok && ch7ok && ch8ok && ch9ok && ch10ok && ch11ok && ch12ok && ch13ok && ch14ok && ch15ok && animalsDrawOk && adamSheetOk && eveSheetAllOk && cardGuard && audioOk && errorCount === 0;
   log(pass ? 'ALL_TESTS_PASSED' : 'TESTS_FAILED');
   process.exit(pass ? 0 : 1);
 } catch (e) {
