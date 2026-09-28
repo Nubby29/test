@@ -153,10 +153,12 @@ try {
   load('js/audio.js');
   load('js/pixel-renderer.js');
   load('js/pixel-tiles.js');
-  load('js/pixel-objects.js',
-    'js/pixel-sprites.js',
-    'js/pixel-characters.js',
-    'js/pixel-animals.js');
+  load('js/pixel-objects.js');
+  load('js/pixel-sprites.js');
+  load('js/pixel-characters.js');
+  load('js/pixel-animals.js');
+  load('js/pixel-effects.js');
+  load('js/pixel-life.js');
   load('js/game.js');
 
   // ---------- helpers ----------
@@ -997,6 +999,19 @@ try {
   const animalsDrawOk = animalSpecs.every(spec => drawAnimal(
     Object.assign({ x: 400, y: 400, state: 'idle', target: null, wait: 0, speed: 0, phase: 0.5 }, spec)) === true);
   log('TEST animalKinds draw=' + animalsDrawOk);
+  // ---------- Phase 12 environmental life ---------- 
+  const lifeApiOk = typeof PixelLife.beforeActors === 'function' &&
+    typeof PixelLife.afterActors === 'function';
+  let lifeRenderOk = false;
+  try {
+    PixelLife.beforeActors(ctx, World, 0, 20, 0, 15, 1.25);
+    PixelLife.afterActors(ctx, World, 0, 20, 0, 15, 1.25);
+    lifeRenderOk = true;
+  } catch (e) {
+    lifeRenderOk = false;
+  }
+  log('TEST environmentalLife API=' + lifeApiOk + ' render=' + lifeRenderOk);
+
   // ---------- Phase 11 architectural assets ----------
   const archOk = ['drawWell','drawAltar','drawTent','drawTower','drawArk','drawGate','drawArchitecture']
     .every(name => typeof PixelObjects[name] === 'function');
@@ -1042,7 +1057,7 @@ try {
   log('TEST audio toggles=' + audioOk);
 
   log('TEST runtimeErrors=' + errorCount);
-  const pass = spriteSheetsOk && spriteFacingOk && spriteActionsOk && artRolesOk && entityVariantsOk && ch1ok && ch2ok && ch3ok && ch4ok && ch5ok && ch6ok && ch7ok && ch8ok && ch9ok && ch10ok && ch11ok && ch12ok && ch13ok && ch14ok && ch15ok && animalsDrawOk && archOk && adamSheetOk && eveSheetAllOk && cardGuard && audioOk && errorCount === 0;
+  const pass = spriteSheetsOk && spriteFacingOk && spriteActionsOk && artRolesOk && entityVariantsOk && ch1ok && ch2ok && ch3ok && ch4ok && ch5ok && ch6ok && ch7ok && ch8ok && ch9ok && ch10ok && ch11ok && ch12ok && ch13ok && ch14ok && ch15ok && animalsDrawOk && archOk && lifeApiOk && lifeRenderOk && adamSheetOk && eveSheetAllOk && cardGuard && audioOk && errorCount === 0;
   log(pass ? 'ALL_TESTS_PASSED' : 'TESTS_FAILED');
   process.exit(pass ? 0 : 1);
 } catch (e) {
