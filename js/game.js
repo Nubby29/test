@@ -2976,6 +2976,8 @@ function render() {
       ctx, World, x0, x1, y0, y1, time,
       (tx, ty) => World.tileAt(tx, ty)
     );
+    // Phase 12: animated environmental life stays in the visual layer.
+    PixelLife.beforeActors(ctx, World, x0, x1, y0, y1, time);
   }
   drawMarkers();
   if (World.rainbow) drawRainbow();
@@ -3037,6 +3039,8 @@ function render() {
   }
   drawLabels();
 
+  // Phase 12: foreground environmental particles/life.
+  PixelLife.afterActors(ctx, World, x0, x1, y0, y1, time);
   PixelEffects.afterActors(ctx, World, x0, x1, y0, y1, time);
   } finally {
     ctx.restore();
