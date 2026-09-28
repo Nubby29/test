@@ -3031,24 +3031,7 @@ function render() {
   }
   drawLabels();
 
-  // forty days and forty nights of rain (outside the ark only)
-  if (World.raining && !World.interior) {
-    ctx.save();
-    ctx.fillStyle = 'rgba(12,20,44,0.28)';
-    ctx.fillRect(cam.x - vw / 2 - 4, cam.y - vh / 2 - 4, vw + 8, vh + 8);
-    ctx.strokeStyle = 'rgba(170,200,255,0.55)';
-    ctx.lineWidth = 1.5;
-    ctx.beginPath();
-    const rw = (x1 - x0 + 1) * TILE, rh = (y1 - y0 + 1) * TILE;
-    for (let i = 0; i < 140; i++) {
-      const rx = x0 * TILE + ((i * 149 + time * 420) % rw);
-      const ry = y0 * TILE + ((i * 83 + time * 1500) % rh);
-      ctx.moveTo(rx, ry);
-      ctx.lineTo(rx - 3, ry + 13);
-    }
-    ctx.stroke();
-    ctx.restore();
-  }
+  PixelEffects.afterActors(ctx, World, x0, x1, y0, y1, time);
   } finally {
     ctx.restore();
   }
