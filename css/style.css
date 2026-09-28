@@ -266,3 +266,10 @@ button:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(255,215,
 .nextChap { margin-top: 16px; font-style: italic; color: #7a6a41; font-size: 15px; }
 #againBtn { margin-top: 18px; }
 
+
+
+/* Phase 1 — crisp low-resolution pixel-art presentation */
+#canvas {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
