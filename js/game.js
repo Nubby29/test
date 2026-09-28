@@ -2979,6 +2979,8 @@ function render() {
     // Phase 12: animated environmental life stays in the visual layer.
     PixelLife.beforeActors(ctx, World, x0, x1, y0, y1, time);
   }
+  // Phase 13: ark interior receives its own window-driven light.
+  PixelLighting.interior(ctx, World, time);
   drawMarkers();
   if (World.rainbow) drawRainbow();
 
@@ -3021,16 +3023,8 @@ function render() {
   actors.sort((a, b) => a.y - b.y);
   for (const a of actors) a.d();
 
-  // darkness until the sun's light shines
-  if (!World.lit) {
-    ctx.fillStyle = 'rgba(6,10,34,0.5)';
-    ctx.fillRect(cam.x - vw / 2 - 4, cam.y - vh / 2 - 4, vw + 8, vh + 8);
-    glow(World.beacon.x, World.beacon.y, 150, 'rgba(255,220,130,0.55)');
-    glow(World.god.x, World.god.y, 120, 'rgba(255,240,200,0.5)');
-    glow(player.x, player.y, 75, 'rgba(255,240,210,0.32)');
-  } else {
-    glow(World.beacon.x, World.beacon.y, 95 + Math.sin(time * 3) * 15, 'rgba(255,225,140,0.35)');
-  }
+  // Phase 13: dynamic lighting replaces the old binary darkness overlay.
+  PixelLighting.beforeActors(ctx, World, x0, x1, y0, y1, time);
 
   if (World.burning) {
     // the ruins of Sodom and Gomorrah still glow on the plain
