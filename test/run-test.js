@@ -154,7 +154,8 @@ try {
   load('js/pixel-renderer.js');
   load('js/pixel-tiles.js');
   load('js/pixel-objects.js',
-    'js/pixel-characters.js');
+    'js/pixel-characters.js',
+    'js/pixel-animals.js');
   load('js/game.js');
 
   // ---------- helpers ----------
