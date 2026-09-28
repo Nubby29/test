@@ -1983,35 +1983,13 @@ function glow(x, y, r, color) {
   ctx.beginPath(); ctx.arc(x, y, r, 0, 6.283); ctx.fill();
 }
 function drawTree(tr) {
-  if (tr.planted) {
-    const k = Math.min(1, (performance.now() - tr.growStart) / 800);
-    tr.r = tr.baseR * (0.3 + 0.7 * k);
-  }
-  const r = tr.r;
-  ctx.fillStyle = 'rgba(0,0,0,0.22)';
-  ctx.beginPath(); ctx.ellipse(tr.x, tr.y + 4, r * 0.9, r * 0.4, 0, 0, 6.283); ctx.fill();
-  ctx.fillStyle = '#7a4f2a';
-  ctx.fillRect(tr.x - 3, tr.y - r * 0.35, 6, r * 0.7);
-  ctx.fillStyle = tr.big ? '#2c7a36' : '#35893f';
-  ctx.beginPath(); ctx.arc(tr.x, tr.y - r * 0.6, r, 0, 6.283); ctx.fill();
-  ctx.fillStyle = '#43a04f';
-  ctx.beginPath(); ctx.arc(tr.x - r * 0.4, tr.y - r * 0.9, r * 0.6, 0, 6.283); ctx.fill();
-  ctx.beginPath(); ctx.arc(tr.x + r * 0.45, tr.y - r * 0.8, r * 0.55, 0, 6.283); ctx.fill();
-  // special trees: fruit + soft glow (tree of knowledge / tree of life)
+  PixelObjects.drawTree(ctx, tr, time);
   if (tr.special) {
-    const knowledge = tr.special === 'knowledge';
-    glow(tr.x, tr.y - r * 0.6, r * 1.7,
-      knowledge ? 'rgba(255,90,60,0.20)' : 'rgba(255,220,120,0.22)');
-    const fruits = knowledge
-      ? ['#e04030', '#ff6a4d', '#e04030', '#ffb3a0', '#ff4d3a', '#e04030']
-      : ['#ffd97a', '#ffe9ad', '#ffcf40', '#fff3c4', '#ffd97a', '#ffe9ad'];
-    for (let i = 0; i < 6; i++) {
-      const ang = i * 1.047 + (knowledge ? 0 : 0.5);
-      const fx = tr.x + Math.cos(ang) * r * 0.62;
-      const fy = tr.y - r * 0.6 + Math.sin(ang) * r * 0.62;
-      ctx.fillStyle = fruits[i];
-      ctx.beginPath(); ctx.arc(fx, fy, 3, 0, 6.283); ctx.fill();
-    }
+    const r = tr.r || tr.baseR || 11;
+    glow(tr.x, tr.y - r * 0.6, r * 1.55,
+      tr.special === 'knowledge'
+        ? 'rgba(255,90,60,0.18)'
+        : 'rgba(255,220,120,0.20)');
   }
 }
 function drawBeacon() {
@@ -2367,29 +2345,7 @@ function drawBuildSpot(b) {
   }
 }
 function drawHut(h) {
-  const x = h.x, y = h.y;
-  ctx.fillStyle = 'rgba(0,0,0,0.25)';
-  ctx.beginPath(); ctx.ellipse(x, y + 9, 24, 7, 0, 0, 6.283); ctx.fill();
-  // mud-brick walls
-  ctx.fillStyle = '#c9a877';
-  ctx.fillRect(x - 18, y - 16, 36, 24);
-  ctx.strokeStyle = '#8a6d4f'; ctx.lineWidth = 1.5;
-  ctx.strokeRect(x - 18, y - 16, 36, 24);
-  ctx.beginPath();
-  ctx.moveTo(x - 18, y - 6); ctx.lineTo(x + 18, y - 6);
-  ctx.moveTo(x - 6, y - 16); ctx.lineTo(x - 6, y + 8);
-  ctx.moveTo(x + 6, y - 16); ctx.lineTo(x + 6, y + 8);
-  ctx.stroke();
-  // thatched roof
-  ctx.fillStyle = '#7a5230';
-  ctx.beginPath();
-  ctx.moveTo(x - 24, y - 16);
-  ctx.lineTo(x, y - 36);
-  ctx.lineTo(x + 24, y - 16);
-  ctx.closePath(); ctx.fill();
-  // door
-  ctx.fillStyle = '#4a3018';
-  ctx.fillRect(x - 5, y - 8, 10, 16);
+  PixelObjects.drawHut(ctx, h);
 }
 // ---------- Chapter 7 scenery: the tower of Babel and its city ----------
 function drawTower() {
@@ -3165,7 +3121,17 @@ function render() {
   const y1 = Math.min(MAP_H - 1, Math.ceil((cam.y + vh / 2) / TILE) + 1);
 
   if (World.interior) drawArkInterior();
-  else renderTiles(x0, x1, y0, y1);
+  else {
+    renderTiles(x0, x1, y0, y1);
+    for (let ty = y0; ty <= y1; ty++) {
+      for (let tx = x0; tx <= x1; tx++) {
+        PixelObjects.drawGroundDecor(
+          ctx, World.tileAt(tx, ty), tx, ty,
+          tx * TILE, ty * TILE, TILE, time
+        );
+      }
+    }
+  }
   drawMarkers();
   if (World.rainbow) drawRainbow();
 
