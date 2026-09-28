@@ -2970,6 +2970,12 @@ function render() {
         );
       }
     }
+    // Phase 8: compose terrain into cliffs, settlement yards, path details,
+    // shrubs and layered background tree masses.
+    PixelObjects.drawComposition(
+      ctx, World, x0, x1, y0, y1, time,
+      (tx, ty) => World.tileAt(tx, ty)
+    );
   }
   drawMarkers();
   if (World.rainbow) drawRainbow();
