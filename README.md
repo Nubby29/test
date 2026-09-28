@@ -228,4 +228,5 @@ The visual layer is being upgraded in isolated phases without changing the quest
 11. **Buildings & architectural assets** — reusable pixel-art huts, wells, altars, tents, gates, towers and ark structures layered onto chapter landmarks.
 12. **Animation & environmental life** — swaying grass, butterflies, fireflies, drifting dust, settlement smoke and subtle meadow particles make the world feel alive without changing gameplay state.
 
+13. **Lighting & time-of-day** — layered dawn, day, dusk and night palettes, dynamic light pools, fire/beacon warmth, changing shadows, story-driven darkness and a dedicated ark-interior light treatment.
 All of these are original renderers built for this project; the upgrade does not copy Pokémon, Zelda, or other commercial game assets.
