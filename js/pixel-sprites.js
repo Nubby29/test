@@ -204,7 +204,7 @@ const PixelSprites = (() => {
     const action = options.action || (options.carrying ? 'carry' : null);
     const frame = selectFrame(moving, Number.isFinite(time) ? time : 0, action);
 
-    const scale = options.scale || 1.75;
+    const scale = options.scale || 1.35;
     const dw = FRAME_W * scale;
     const dh = FRAME_H * scale;
     const groundY = entity.y + (options.groundOffset === undefined ? 6 : options.groundOffset);
